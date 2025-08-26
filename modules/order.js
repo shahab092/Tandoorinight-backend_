@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
     paidAmount: { type: Number },
     discount: { type: Number, default: 0 },
     remainAmount: { type: Number, default: 0 },
-    status: { type: String, default: 'pending' },
+    status: { type: String, default: 'Paid' },
     paymentMethod: { type: String, default: null }, // ✅ Added payment method (optional)
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', default: null },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },

@@ -22,7 +22,7 @@ exports.placeOrder = async (req, res) => {
       paymentMethod: paymentMethod || null,
       deliveryPersonId: deliveryPersonId || null, // ✅ set if provided
       // ✅ Include this if provided
-      status: 'pending'
+      status: 'Paid'
     });
 
     // ✅ Save RemainHistory only if there's a remaining amount and customer exists
@@ -118,6 +118,7 @@ exports.getMonthlyOrders = async (req, res) => {
       .populate('customerId', 'name address phone')  // ✅ populate these customer fields
       .populate('items.itemId', 'title unitPrice unit category images barcodeValue')  // ✅ item fields
       .populate('userId', 'name email')// populate item details
+      .populate('deliveryPersonId', 'name phone email')
     res.json(orders);
 
   } catch (error) {
