@@ -15,6 +15,11 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: { type: String, default: null }, // ✅ Added payment method (optional)
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', default: null },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    deliveryPersonId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DeliveryPerson',
+        default: null
+    },
     createdAt: { type: Date, default: Date.now }
 });
 

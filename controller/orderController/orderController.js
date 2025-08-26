@@ -6,11 +6,11 @@ const User = require('../../modules/userSchema'); // ✅ Import this!
 
 exports.placeOrder = async (req, res) => {
   try {
-    const { items, totalAmount, paidAmount, discount, customerId, paymentMethod } = req.body;
+    const { items, totalAmount, paidAmount, discount, customerId, paymentMethod, deliveryPersonId } = req.body;
     const userId = req.user._id;
     const remainAmount = totalAmount - paidAmount;
 
-    // ✅ Create Order (without inventory stock check/update)
+    // ✅ Create Order (without inventory stock check/update) ,deliveryPersonId   
     const order = await Order.create({
       items,
       totalAmount,
@@ -19,7 +19,9 @@ exports.placeOrder = async (req, res) => {
       remainAmount,
       customerId: customerId || null,
       userId, // 👈 comes from the token
-      paymentMethod: paymentMethod || null, // ✅ Include this if provided
+      paymentMethod: paymentMethod || null,
+      deliveryPersonId: deliveryPersonId || null, // ✅ set if provided
+      // ✅ Include this if provided
       status: 'pending'
     });
 
