@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cookieParser()); // ⬅️ must come after express.json
 app.use(
   cors({
-    origin: "https://tandoorinight-backend.vercel.app/", // frontend url
+    origin: "https://tandoorinight1.vercel.app/", // frontend url
     credentials: true,               // allow sending cookies
   })
 );
