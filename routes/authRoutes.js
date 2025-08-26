@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require("../controller/auth/authController");
 const authchecking = require("../controller/authchecking/authchecking");
 const authMiddleware = require("../middleware/authmiddleware/authmiddleware");
+// const authMiddleware = require("../middleware/authmiddleware/authmiddleware");
 
 router.get("/me", authMiddleware, authchecking.me);
 // signup

@@ -21,14 +21,14 @@ app.use(express.json());
 app.use(cookieParser()); // ⬅️ must come after express.json
 app.use(
   cors({
-    origin: " https://tandoorinight1.vercel.app", // frontend url
+    origin: "https://tandoorinight1.vercel.app", // frontend url
     credentials: true,               // allow sending cookies
   })
 );
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.send("Welcome back");
+  res.send("Welcome back!");
 });
 
 app.use("/api/auth", authRoutes);
