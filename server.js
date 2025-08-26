@@ -12,6 +12,7 @@ const inventoryRoutes = require('./routes/inventoryRoutes')
 const order = require('./routes/orderRoutes')
 const ledgerRoutes = require('./routes/ledgerRoutes')
 const expenseRoutes = require('./routes/expenseRoutes')
+const deliveryPersonRoutes = require('./routes/deliveryPersonRoutes')
 dotenv.config();
 const app = express();
 
@@ -20,7 +21,7 @@ app.use(express.json());
 app.use(cookieParser()); // ⬅️ must come after express.json
 app.use(
   cors({
-    origin: "https://pos-frontend-self.vercel.app", // frontend url
+    origin: " https://tandoorinight1.vercel.app", // frontend url
     credentials: true,               // allow sending cookies
   })
 );
@@ -39,6 +40,7 @@ app.use("/api/inventory", inventoryRoutes);
 app.use('/api/shop', order);
 app.use('/api/ledger', ledgerRoutes);
 app.use("/api/expenses", expenseRoutes);
+app.use("/api/delivery-persons", deliveryPersonRoutes)
 const PORT = process.env.PORT || 3000;
 
 const startServer = async () => {
@@ -56,4 +58,4 @@ startServer();
 
 
 // http://localhost:5000
-//https://pos-frontend-self.vercel.app
+//https://tandoorinight1.vercel.app/

@@ -10,17 +10,7 @@ exports.placeOrder = async (req, res) => {
     const userId = req.user._id;
     const remainAmount = totalAmount - paidAmount;
 
-    
-    for (const { itemId, quantity } of items) {
-      const inventory = await Inventory.findOne({ itemId }).populate("itemId", "title"); // ✅ populate title
-      if (!inventory || inventory.quantity < quantity) {
-        const itemName = inventory?.itemId?.title || "Please add In inventory";
-        return res.status(400).json({ message: `Insufficient stock for item: ${itemName}` });
-      }
-    }
-
-
-    // Create Order (including optional paymentMethod)
+    // ✅ Create Order (without inventory stock check/update)
     const order = await Order.create({
       items,
       totalAmount,
@@ -33,15 +23,7 @@ exports.placeOrder = async (req, res) => {
       status: 'pending'
     });
 
-    // Update Inventory
-    for (const { itemId, quantity } of items) {
-      await Inventory.updateOne(
-        { itemId },
-        { $inc: { quantity: -quantity } }
-      );
-    }
-
-    // Save RemainHistory only if there's a remaining amount and customer exists
+    // ✅ Save RemainHistory only if there's a remaining amount and customer exists
     if (remainAmount > 0 && customerId) {
       await RemainHistory.create({
         orderId: order._id,
@@ -57,6 +39,7 @@ exports.placeOrder = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
 
 exports.updateCartItemQuantity = async (req, res) => {
   try {
