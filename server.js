@@ -57,5 +57,5 @@ const startServer = async () => {
 startServer();
 
 
-// http://localhost:5000
+//  http://localhost:5173
 //https://tandoorinight1.vercel.app/

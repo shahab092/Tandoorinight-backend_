@@ -21,11 +21,7 @@ const inventorySchema = new mongoose.Schema({
         required: true,
         min: 0
     },
-    price: {
-        type: Number,
-        required: true,
-        min: 0
-    }
+ 
 }, { timestamps: true });
 
 module.exports =mongoose.model('Inventory',inventorySchema)

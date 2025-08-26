@@ -2,28 +2,14 @@ const Inventory = require("../../modules/Inventory");
 
 const addInventory = async (req, res) => {
   try {
-    const { itemId, unit, quantity, costPrice, price } = req.body;
+    const { itemId, unit, quantity, costPrice } = req.body;
 
-    if (!itemId || !unit || quantity == null || costPrice == null || price == null) {
+    if (!itemId || !unit || quantity == null || costPrice == null) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // Check if inventory for this itemId already exists
-    const existingInventory = await Inventory.findOne({ itemId });
-
-    if (existingInventory) {
-      // Update quantity and optionally prices
-      existingInventory.quantity += Number(quantity);
-      existingInventory.unit = unit; // optional update
-      existingInventory.costPrice = costPrice; // optional update
-      existingInventory.price = price; // optional update
-
-      await existingInventory.save();
-      return res.status(200).json({ message: "Inventory quantity updated", inventory: existingInventory });
-    }
-
-    // If not exists, create a new entry
-    const newInventory = new Inventory({ itemId, unit, quantity, costPrice, price });
+    // ✅ Always create new inventory record (no price)
+    const newInventory = new Inventory({ itemId, unit, quantity, costPrice });
     await newInventory.save();
 
     res.status(201).json({ message: "Inventory item added", inventory: newInventory });
@@ -42,19 +28,18 @@ const getAllInventory = async (req, res) => {
   }
 };
 
-
 const updateInventory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { itemId, unit, quantity, costPrice, price } = req.body;
+    const { itemId, unit, quantity, costPrice } = req.body;
 
-    if (!itemId || !unit || quantity == null || costPrice == null || price == null) {
+    if (!itemId || !unit || quantity == null || costPrice == null) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     const updated = await Inventory.findByIdAndUpdate(
       id,
-      { itemId, unit, quantity, costPrice, price },
+      { itemId, unit, quantity, costPrice },
       { new: true }
     );
 
@@ -78,10 +63,42 @@ const deleteInventory = async (req, res) => {
     res.status(500).json({ message: "Delete failed" });
   }
 };
+// 📌 Get Inventory by Date Range
+const getInventoryByDateRange = async (req, res) => {
+  try {
+    const { from, to } = req.query;
+
+    if (!from || !to) {
+      return res.status(400).json({ message: "From and To dates are required" });
+    }
+
+    // Parse dates properly
+    const fromDate = new Date(from + "T00:00:00.000Z"); 
+    const toDate = new Date(to + "T23:59:59.999Z");
+ 
+
+    // Query with createdAt
+    const inventory = await Inventory.find({
+      createdAt: { $gte: fromDate, $lte: toDate }
+    }).populate("itemId", "title unit");
+
+    res.status(200).json({ 
+      success: true, 
+      count: inventory.length, 
+      inventory 
+    });
+  } catch (error) {
+    console.error("Date Range Inventory Error:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
+
 
 module.exports = {
   addInventory,
   getAllInventory,
   updateInventory,
   deleteInventory,
+  getInventoryByDateRange
 };
